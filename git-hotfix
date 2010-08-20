@@ -3,6 +3,9 @@
 # This script will resolve or create hotfix branches for you. When resolving it
 # makes sure that the hotfix is applied to both master and live.
 
+# Usage:
+#     git hotfix [--resolve|-r] <hotfix-branch-name>
+
 # If any command fails, script should fail.
 set -e
 
