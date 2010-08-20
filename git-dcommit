@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Get the "refs/remotes/<remote>/<branch>" that this branch is tracking.
+REMOTE_BRANCH=`git rev-parse --verify --quiet --symbolic-full-name HEAD@{u}`
+
+# Make sure that $REMOTE_BRANCH isn't null; if it is, we exit with an error
+# message.
+[[ -n "$REMOTE_BRANCH" ]] || (echo "fatal: This branch is not tracking a remote." && exit 1)
+
+# Chop it down to <remote>/<branch>
+REMOTE_BRANCH=${REMOTE_BRANCH#refs/remotes/}
+
+# Split out the <remote> and <branch> to their own variables.
+BRANCH=`basename $REMOTE_BRANCH`
+REMOTE=${REMOTE_BRANCH//\/$BRANCH/}
+
+# Grab the latest from the remote.
+echo "=== Running \"git fetch $REMOTE\" ==="
+git fetch $REMOTE || (echo "fatal: Couldn't fetch remote at $REMOTE" && exit 1)
+
+# Rebase on top of the latest origin from this branch.
+echo "=== Running \"git merge --ff $REMOTE/$BRANCH\" ==="
+git merge --ff "$REMOTE/$BRANCH" || (echo "fatal: Merging $REMOTE/$BRANCH was unsuccessful" && exit 1)
+
+# Push this branch to the remote.
+echo "=== Running \"git push $REMOTE $BRANCH\" ==="
+git push $REMOTE $BRANCH || (echo "fatal: Failed to push to \"$REMOTE $BRANCH\"" && exit 1)
+
+exit 0
