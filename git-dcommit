@@ -18,7 +18,7 @@ REMOTE=${REMOTE_BRANCH//\/$BRANCH/}
 echo "=== Running \"git fetch $REMOTE\" ==="
 git fetch $REMOTE || (echo "fatal: Couldn't fetch remote at $REMOTE" && exit 1)
 
-# Rebase on top of the latest origin from this branch.
+# Merge the latest origin.
 echo "=== Running \"git merge --ff $REMOTE/$BRANCH\" ==="
 git merge --ff "$REMOTE/$BRANCH" || (echo "fatal: Merging $REMOTE/$BRANCH was unsuccessful" && exit 1)
 
