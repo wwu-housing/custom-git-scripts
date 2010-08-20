@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# This script will resolve or create hotfix branches for you. When resolving it
+# makes sure that the hotfix is applied to both master and live.
+
 # If any command fails, script should fail.
 set -e
 
