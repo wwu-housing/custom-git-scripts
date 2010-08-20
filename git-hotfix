@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# If any command fails, script should fail.
+set -e
+
+if [ "$1" == "--resolve" || "$1" == "-r" ]; then
+    # Resolve an existing hotfix branch in to live and master
+    shift
+    branch="${1/-hotfix/}-hotfix"
+    git checkout live
+    git merge --no-ff $branch
+    git checkout -b "copy-$branch" $branch
+    git rebase --onto master $branch "copy-$branch"
+    git checkout master
+    git merge --no-ff "copy-$branch"
+else
+    # Create a new hotfix branch.
+    git checkout -b "${1/-hotfix/}-hotfix" live
+fi
+
