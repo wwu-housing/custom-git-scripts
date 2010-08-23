@@ -9,10 +9,10 @@
 # If any command fails, script should fail.
 set -e
 
-if [ "$1" == "--resolve" || "$1" == "-r" ]; then
+if [ "$2" == "--resolve" || "$2" == "-r" ]; then
     # Resolve an existing hotfix branch in to live and master
     shift
-    branch="${1/-hotfix/}-hotfix"
+    branch="${2/-hotfix/}-hotfix"
     git checkout live
     git merge --no-ff $branch
     git checkout -b "copy-$branch" $branch
