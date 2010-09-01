@@ -14,13 +14,13 @@ if [[ "$1" == "--resolve" || "$1" == "-r" ]]; then
     shift
     branch="${1/-hotfix/}-hotfix"
     git checkout live
-    git merge --no-ff $branch
-    git checkout -b "copy-$branch" $branch
-    git rebase --onto master $branch "copy-$branch"
+    git merge --no-ff "$branch"
+    git checkout -b "copy-$branch" "$branch"
+    git rebase --onto master "copy-$branch" live
     git checkout master
     git merge --no-ff "copy-$branch"
 else
     # Create a new hotfix branch.
-    git checkout -b "${1/-hotfix/}-hotfix" live
+    echo "git checkout -b ${1/-hotfix/}-hotfix live"
 fi
 
