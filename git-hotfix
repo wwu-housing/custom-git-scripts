@@ -10,17 +10,30 @@
 set -e
 
 if [[ "$1" == "--resolve" || "$1" == "-r" ]]; then
+
+    start_branch=`git branch | grep \* | tr "*" " "`
+
     # Resolve an existing hotfix branch in to live and master
+
     shift
     branch="${1/-hotfix/}-hotfix"
-    git checkout live
-    git merge --no-ff "$branch"
+
     git checkout -b "copy-$branch" "$branch"
-    git rebase --onto master "copy-$branch" live
+    git rebase --onto master live "copy-$branch"
     git checkout master
     git merge --no-ff "copy-$branch"
+    git branch -d "copy-$branch"
+
+    git checkout live
+    git merge --no-ff "$branch"
+    git branch -d "$branch"
+
+    git checkout "$start_branch"
+
 else
+
     # Create a new hotfix branch.
     git checkout -b "${1/-hotfix/}-hotfix" live
+
 fi
 
