@@ -21,6 +21,6 @@ if [[ "$1" == "--resolve" || "$1" == "-r" ]]; then
     git merge --no-ff "copy-$branch"
 else
     # Create a new hotfix branch.
-    echo "git checkout -b ${1/-hotfix/}-hotfix live"
+    git checkout -b "${1/-hotfix/}-hotfix" live
 fi
 
